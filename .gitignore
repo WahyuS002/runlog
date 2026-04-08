@@ -21,3 +21,7 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Personal runlog data — kept out of git so forks stay clean.
+# Sample data lives in src/data/example/ and IS committed.
+src/data/*.json

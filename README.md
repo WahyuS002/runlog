@@ -29,6 +29,32 @@ npm run dev
 npm run dev -- --open
 ```
 
+## Data
+
+Runlog entries live as one JSON file per run under `src/data/`, named `YYYY-MM-DD-HHMM.json` (date + start time, no colon — sorts chronologically). The schema is defined in `src/lib/types/runlog.ts`.
+
+- `src/data/*.json` — your personal runlog data. **Gitignored** so forks stay clean.
+- `src/data/example/*.json` — sample runs that ship with the repo. Used as a fallback when no personal data is present (fresh forks, CI, etc).
+
+The loader at `src/lib/data/runs.ts` shows personal data when available, otherwise falls back to the example set.
+
+### Adding your own runs
+
+Drop new files into `src/data/` following the naming convention and schema. They will be picked up automatically by Vite glob import.
+
+### Deploying with private data (Cloudflare Pages)
+
+Personal data is intentionally kept out of this repo. For production deploys, store your data in a separate **private** GitHub repo and let the Cloudflare Pages build pull it in:
+
+1. Create a private repo (e.g. `runlog-data`) containing only your `*.json` files at the root.
+2. Generate a GitHub fine-grained PAT with read-only access to that repo.
+3. In Cloudflare Pages → your project → Settings → Environment variables, add:
+   - `RUNLOG_DATA_TOKEN` = the PAT
+   - `RUNLOG_DATA_REPO` = `<your-username>/runlog-data`
+4. Set the build command to `pnpm build:cf` (uses `scripts/cf-build.sh`).
+
+If those env vars are not set, the build falls back to the example data — so a fresh fork deploys cleanly out of the box.
+
 ## Building
 
 To create a production version of your app:

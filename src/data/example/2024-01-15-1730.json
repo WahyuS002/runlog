@@ -1,0 +1,47 @@
+{
+	"date": "2024-01-15",
+	"time": "17:30",
+	"distance_km": 0.35,
+	"duration": "00:02:30",
+	"avg_pace": "7:09",
+	"avg_pace_seconds": 429,
+	"avg_cadence": 150,
+	"steps": 380,
+	"calories": 18,
+	"avg_speed_kmh": 8.4,
+	"avg_stride_cm": 92,
+	"avg_hr": 140,
+	"max_hr": 155,
+	"hr_zones_minutes": {
+		"extreme": 0,
+		"anaerobic": 0,
+		"aerobic": 1,
+		"fat_burning": 1,
+		"warm_up": 0.5
+	},
+	"hr_recovery": {
+		"dropped_bpm": 12,
+		"start_bpm": 155,
+		"end_bpm": 125,
+		"duration_minutes": 2,
+		"time": "17:34"
+	},
+	"performance": {
+		"aerobic_training_stress": null,
+		"vo2max": {
+			"value": 42,
+			"unit": "ml/kg/min",
+			"status": "good"
+		},
+		"recovery_time_hours": 6
+	},
+	"pace": {
+		"avg": "7:09",
+		"fastest": "6:55",
+		"per_km": []
+	},
+	"cadence": {
+		"avg_spm": 150,
+		"max_spm": 158
+	}
+}
