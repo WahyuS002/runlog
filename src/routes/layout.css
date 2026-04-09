@@ -1,3 +1,64 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+@theme {
+	/* Surface palette */
+	--color-bone: #f7f5f0;
+	--color-bone-dark: #ede9e0;
+	--color-surface: #ffffff;
+	--color-surface-dim: #f0ede6;
+
+	/* Text */
+	--color-graphite: #1a1a1a;
+	--color-graphite-secondary: #6b7280;
+
+	/* Accents */
+	--color-cyan-accent: #06b6d4;
+	--color-cyan-soft: #cffafe;
+	--color-lime-accent: #84cc16;
+	--color-lime-soft: #ecfccb;
+
+	/* Divider */
+	--color-divider: #e5e7eb;
+
+	/* HR zone colors */
+	--color-zone-extreme: #ef4444;
+	--color-zone-anaerobic: #f97316;
+	--color-zone-aerobic: #eab308;
+	--color-zone-fat-burning: #22c55e;
+	--color-zone-warm-up: #94a3b8;
+
+	/* Status badge colors */
+	--color-status-productive: #84cc16;
+	--color-status-improving: #06b6d4;
+	--color-status-maintained: #94a3b8;
+	--color-status-recovery: #f59e0b;
+	--color-status-detraining: #f97316;
+	--color-status-overreaching: #ef4444;
+	--color-status-unproductive: #6b7280;
+}
+
+@layer base {
+	body {
+		background-color: var(--color-bone);
+		color: var(--color-graphite);
+		font-variant-numeric: tabular-nums;
+		-webkit-font-smoothing: antialiased;
+	}
+}
+
+@keyframes fade-up {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.animate-fade-up {
+	animation: fade-up 0.5s ease-out both;
+}
