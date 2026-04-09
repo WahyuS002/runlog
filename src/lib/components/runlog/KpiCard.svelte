@@ -15,29 +15,29 @@
 	} = $props();
 </script>
 
-<div class="rounded-2xl border border-divider bg-surface px-5 py-4 shadow-sm">
-	<div class="flex items-center gap-2">
+<div class="rounded-xl border border-divider/50 bg-surface px-3.5 py-3 shadow-xs">
+	<div class="flex items-center gap-1.5">
 		{#if icon}
 			<span class="kpi-icon-chip" aria-hidden="true">
 				{@render iconRender()}
 			</span>
 		{/if}
-		<p class="text-xs font-medium tracking-widest text-graphite-secondary uppercase">{label}</p>
+		<p class="text-[10px] font-medium tracking-wider text-graphite-secondary uppercase">{label}</p>
 	</div>
-	<p class="mt-1 flex items-baseline gap-1.5">
-		<span class="text-3xl font-semibold tracking-tight text-graphite">{value}</span>
+	<p class="mt-0.5 flex items-baseline gap-1">
+		<span class="text-xl font-semibold tracking-tight text-graphite">{value}</span>
 		{#if unit}
-			<span class="text-sm font-medium text-graphite-secondary">{unit}</span>
+			<span class="text-xs text-graphite-secondary">{unit}</span>
 		{/if}
 	</p>
 	{#if sublabel}
-		<p class="mt-1 text-xs text-graphite-secondary">{sublabel}</p>
+		<p class="mt-0.5 text-[10px] text-graphite-secondary">{sublabel}</p>
 	{/if}
 </div>
 
 {#snippet iconRender()}
 	{#if icon}
 		{@const Icon = icon}
-		<Icon size={18} strokeWidth={1.75} class="text-graphite-secondary" />
+		<Icon size={14} strokeWidth={1.75} class="text-graphite-secondary" />
 	{/if}
 {/snippet}
