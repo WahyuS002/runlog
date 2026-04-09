@@ -2,14 +2,14 @@
 	import { computeDashboard, formatDate } from '$lib/data/dashboard';
 	import KpiCard from '$lib/components/runlog/KpiCard.svelte';
 	import RunCard from '$lib/components/runlog/RunCard.svelte';
-	import MonthlyTrend from '$lib/components/runlog/MonthlyTrend.svelte';
+	import WeeklyTrend from '$lib/components/runlog/WeeklyTrend.svelte';
 	import InsightPanel from '$lib/components/runlog/InsightPanel.svelte';
 	import Footprints from 'lucide-svelte/icons/footprints';
 	import Route from 'lucide-svelte/icons/route';
 	import CalendarRange from 'lucide-svelte/icons/calendar-range';
 	import Gauge from 'lucide-svelte/icons/gauge';
 	import HeartPulse from 'lucide-svelte/icons/heart-pulse';
-	import TrendingUp from 'lucide-svelte/icons/trending-up';
+
 	import List from 'lucide-svelte/icons/list';
 
 	const dashboard = computeDashboard();
@@ -87,9 +87,9 @@
 		</div>
 	</section>
 
-	<!-- Monthly Trend -->
+	<!-- Weekly Trend -->
 	<section class="animate-fade-up mb-8" style="animation-delay: 330ms">
-		<MonthlyTrend aggregates={dashboard.monthlyAggregates} />
+		<WeeklyTrend data={dashboard.weeklyData} />
 	</section>
 
 	<!-- Main content: Run list + Insights sidebar -->

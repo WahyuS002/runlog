@@ -50,13 +50,61 @@ export function formatDateShort(iso: string): { dayMon: string; yearTime: string
 }
 
 const MIN_DISTANCE_FOR_PACE = 1;
+const DAY_MS = 86_400_000;
 
-export interface MonthAggregate {
-	month: string;
+function dateToMs(iso: string): number {
+	const [y, m, d] = iso.split('-').map(Number);
+	return Date.UTC(y, m - 1, d);
+}
+
+function msToIso(ms: number): string {
+	const d = new Date(ms);
+	const y = d.getUTCFullYear();
+	const m = String(d.getUTCMonth() + 1).padStart(2, '0');
+	const dd = String(d.getUTCDate()).padStart(2, '0');
+	return `${y}-${m}-${dd}`;
+}
+
+export interface WeekDay {
+	date: string;
 	label: string;
-	runs: number;
 	distanceKm: number;
-	totalDurationSeconds: number;
+}
+
+export interface WeeklyData {
+	totalKm: number;
+	prevTotalKm: number;
+	deltaPct: number | null;
+	days: WeekDay[];
+}
+
+function computeWeeklyData(list: Runlog[]): WeeklyData {
+	const anchorMs = dateToMs(list[0].date);
+
+	const dayMap = new Map<string, number>();
+	for (const run of list) {
+		dayMap.set(run.date, Math.round(((dayMap.get(run.date) ?? 0) + run.distance_km) * 100) / 100);
+	}
+
+	const days: WeekDay[] = [];
+	let totalKm = 0;
+	for (let i = 6; i >= 0; i--) {
+		const iso = msToIso(anchorMs - i * DAY_MS);
+		const km = dayMap.get(iso) ?? 0;
+		totalKm += km;
+		days.push({ date: iso, label: iso.split('-')[2], distanceKm: Math.round(km * 100) / 100 });
+	}
+	totalKm = Math.round(totalKm * 100) / 100;
+
+	let prevTotalKm = 0;
+	for (let i = 13; i >= 7; i--) {
+		prevTotalKm += dayMap.get(msToIso(anchorMs - i * DAY_MS)) ?? 0;
+	}
+	prevTotalKm = Math.round(prevTotalKm * 100) / 100;
+
+	const deltaPct = prevTotalKm > 0 ? Math.round(((totalKm - prevTotalKm) / prevTotalKm) * 100) : null;
+
+	return { totalKm, prevTotalKm, deltaPct, days };
 }
 
 export interface DashboardData {
@@ -69,35 +117,9 @@ export interface DashboardData {
 	latestVo2max: { value: number; unit: string; status: string };
 	avgRecoveryHours: number;
 	totalCalories: number;
-	monthlyAggregates: MonthAggregate[];
+	weeklyData: WeeklyData;
 	runs: Runlog[];
 	isExampleData: boolean;
-}
-
-function computeMonthlyAggregates(list: Runlog[]): MonthAggregate[] {
-	const map = new Map<string, MonthAggregate>();
-
-	for (const run of list) {
-		const month = run.date.slice(0, 7);
-		const [y, m] = month.split('-');
-
-		if (!map.has(month)) {
-			map.set(month, {
-				month,
-				label: `${MONTH_NAMES[parseInt(m) - 1]} ${y}`,
-				runs: 0,
-				distanceKm: 0,
-				totalDurationSeconds: 0
-			});
-		}
-
-		const agg = map.get(month)!;
-		agg.runs++;
-		agg.distanceKm = Math.round((agg.distanceKm + run.distance_km) * 100) / 100;
-		agg.totalDurationSeconds += durationToSeconds(run.duration);
-	}
-
-	return [...map.values()].sort((a, b) => a.month.localeCompare(b.month));
 }
 
 export function computeDashboard(): DashboardData {
@@ -149,7 +171,7 @@ export function computeDashboard(): DashboardData {
 		},
 		avgRecoveryHours,
 		totalCalories,
-		monthlyAggregates: computeMonthlyAggregates(runs),
+		weeklyData: computeWeeklyData(runs),
 		runs,
 		isExampleData
 	};
