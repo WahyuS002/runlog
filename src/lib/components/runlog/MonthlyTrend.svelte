@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { MonthAggregate } from '$lib/data/dashboard';
+	import TrendingUp from 'lucide-svelte/icons/trending-up';
 
 	let { aggregates }: { aggregates: MonthAggregate[] } = $props();
 
@@ -7,7 +8,8 @@
 </script>
 
 <div class="rounded-2xl border border-divider bg-surface p-5 shadow-sm">
-	<h2 class="text-xs font-medium tracking-widest text-graphite-secondary uppercase">
+	<h2 class="section-heading">
+		<TrendingUp size={16} strokeWidth={1.75} class="text-graphite-secondary" aria-hidden="true" />
 		Monthly Distance
 	</h2>
 

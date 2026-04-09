@@ -2,6 +2,7 @@
 	import { slide } from 'svelte/transition';
 	import type { Runlog } from '$lib/types/runlog';
 	import { formatNumber } from '$lib/data/dashboard';
+	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import PaceSplitBars from './PaceSplitBars.svelte';
 	import HrZoneBar from './HrZoneBar.svelte';
 
@@ -70,17 +71,14 @@
 		{/if}
 
 		<!-- Chevron -->
-		<svg
-			class="h-4 w-4 shrink-0 text-graphite-secondary transition-transform duration-200 {expanded
+		<span
+			class="shrink-0 text-graphite-secondary transition-transform duration-200 {expanded
 				? 'rotate-180'
 				: ''}"
-			fill="none"
-			stroke="currentColor"
-			stroke-width="2"
-			viewBox="0 0 24 24"
+			aria-hidden="true"
 		>
-			<path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-		</svg>
+			<ChevronDown size={16} strokeWidth={1.75} />
+		</span>
 	</button>
 
 	<!-- Expanded analytics panel -->

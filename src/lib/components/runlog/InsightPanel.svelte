@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { formatNumber, type DashboardData } from '$lib/data/dashboard';
+	import Trophy from 'lucide-svelte/icons/trophy';
+	import Activity from 'lucide-svelte/icons/activity';
 
 	let { data }: { data: DashboardData } = $props();
 
@@ -15,7 +17,8 @@
 <div class="space-y-4">
 	<!-- Records -->
 	<div class="rounded-2xl border border-divider bg-surface p-5 shadow-sm">
-		<h3 class="text-xs font-medium tracking-widest text-graphite-secondary uppercase">
+		<h3 class="section-heading">
+			<Trophy size={16} strokeWidth={1.75} class="text-graphite-secondary" aria-hidden="true" />
 			Personal Records
 		</h3>
 		<dl class="mt-3 space-y-3">
@@ -50,7 +53,8 @@
 
 	<!-- Performance -->
 	<div class="rounded-2xl border border-divider bg-surface p-5 shadow-sm">
-		<h3 class="text-xs font-medium tracking-widest text-graphite-secondary uppercase">
+		<h3 class="section-heading">
+			<Activity size={16} strokeWidth={1.75} class="text-graphite-secondary" aria-hidden="true" />
 			Performance
 		</h3>
 		<div class="mt-3 space-y-3">

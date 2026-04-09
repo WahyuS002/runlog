@@ -4,6 +4,13 @@
 	import RunCard from '$lib/components/runlog/RunCard.svelte';
 	import MonthlyTrend from '$lib/components/runlog/MonthlyTrend.svelte';
 	import InsightPanel from '$lib/components/runlog/InsightPanel.svelte';
+	import Footprints from 'lucide-svelte/icons/footprints';
+	import Route from 'lucide-svelte/icons/route';
+	import CalendarRange from 'lucide-svelte/icons/calendar-range';
+	import Gauge from 'lucide-svelte/icons/gauge';
+	import HeartPulse from 'lucide-svelte/icons/heart-pulse';
+	import TrendingUp from 'lucide-svelte/icons/trending-up';
+	import List from 'lucide-svelte/icons/list';
 
 	const dashboard = computeDashboard();
 	let expandedId = $state<string | null>(null);
@@ -25,9 +32,14 @@
 	<!-- Header -->
 	<header class="animate-fade-up mb-8">
 		<div class="flex items-center gap-3">
+			<span aria-hidden="true">
+				<Footprints size={24} strokeWidth={1.75} class="text-cyan-accent" />
+			</span>
 			<h1 class="text-2xl font-bold tracking-tight text-graphite">Runlog</h1>
 			{#if dashboard.isExampleData}
-				<span class="rounded-full bg-amber-50 px-2.5 py-0.5 text-[10px] font-medium text-amber-700">
+				<span
+					class="rounded-full bg-amber-50 px-2.5 py-0.5 text-[10px] font-medium text-amber-700"
+				>
 					Example data
 				</span>
 			{/if}
@@ -43,6 +55,7 @@
 				value={dashboard.totalDistanceKm.toFixed(1)}
 				unit="km"
 				sublabel={`${dashboard.totalRuns} sessions`}
+				icon={Route}
 			/>
 		</div>
 		<div class="animate-fade-up" style="animation-delay: 120ms">
@@ -51,6 +64,7 @@
 				value={String(dashboard.totalRuns)}
 				unit="sessions"
 				sublabel={dashboard.totalDuration}
+				icon={CalendarRange}
 			/>
 		</div>
 		<div class="animate-fade-up" style="animation-delay: 190ms">
@@ -59,6 +73,7 @@
 				value={dashboard.fastestRun?.pace ?? '—'}
 				unit={dashboard.fastestRun ? '/km' : ''}
 				sublabel={dashboard.fastestRun?.date ?? 'No qualifying runs'}
+				icon={Gauge}
 			/>
 		</div>
 		<div class="animate-fade-up" style="animation-delay: 260ms">
@@ -67,6 +82,7 @@
 				value={String(dashboard.latestVo2max.value)}
 				unit={dashboard.latestVo2max.unit}
 				sublabel={dashboard.latestVo2max.status}
+				icon={HeartPulse}
 			/>
 		</div>
 	</section>
@@ -81,9 +97,10 @@
 		<!-- Run list -->
 		<section>
 			<h2
-				class="animate-fade-up mb-4 text-xs font-medium tracking-widest text-graphite-secondary uppercase"
+				class="animate-fade-up section-heading mb-4"
 				style="animation-delay: 400ms"
 			>
+				<List size={16} strokeWidth={1.75} class="text-graphite-secondary" aria-hidden="true" />
 				Recent Runs
 			</h2>
 			<div class="space-y-3">
