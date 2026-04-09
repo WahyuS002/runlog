@@ -33,7 +33,7 @@
 		: ''}"
 >
 	<button
-		class="flex w-full cursor-pointer items-center gap-3 px-3.5 py-2.5 text-left"
+		class="flex w-full cursor-pointer items-center gap-3 px-3.5 py-2 text-left"
 		onclick={onToggle}
 		aria-expanded={expanded}
 	>

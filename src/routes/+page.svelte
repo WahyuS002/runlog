@@ -27,30 +27,34 @@
 	<title>Runlog</title>
 </svelte:head>
 
-<div class="mx-auto max-w-5xl px-4 py-6 sm:px-6">
+<div class="mx-auto max-w-4xl px-4 py-5 sm:px-6">
 	<!-- Header -->
-	<header class="animate-fade-up mb-5">
+	<header class="animate-fade-up mb-4">
 		<div class="flex items-center gap-2">
-			<Footprints size={20} strokeWidth={1.75} class="text-cyan-accent" aria-hidden="true" />
-			<h1 class="text-xl font-bold tracking-tight text-graphite">Runlog</h1>
+			<Footprints size={18} strokeWidth={1.75} class="text-cyan-accent" aria-hidden="true" />
+			<h1 class="text-lg font-bold tracking-tight text-graphite">Runlog</h1>
 			{#if dashboard.isExampleData}
-				<span
-					class="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700"
-				>
+				<span class="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700">
 					Example data
 				</span>
 			{/if}
 		</div>
 	</header>
 
-	<!-- Hero: Weekly + Insights side by side -->
-	<section class="animate-fade-up mb-5 grid items-start gap-5 lg:grid-cols-[1fr_260px]" style="animation-delay: 60ms">
+	<!-- Top fold: Hero + Right rail -->
+	<section
+		class="animate-fade-up mb-4 grid items-start gap-4 lg:grid-cols-[1.7fr_0.9fr]"
+		style="animation-delay: 50ms"
+	>
 		<WeeklyTrend data={dashboard.weeklyData} />
 		<InsightPanel data={dashboard} />
 	</section>
 
-	<!-- KPI support row -->
-	<section class="animate-fade-up mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4" style="animation-delay: 150ms">
+	<!-- Stat strip -->
+	<section
+		class="animate-fade-up stat-strip mb-5"
+		style="animation-delay: 120ms"
+	>
 		<KpiCard
 			label="Distance"
 			value={dashboard.totalDistanceKm.toFixed(1)}
@@ -84,16 +88,16 @@
 	<!-- Recent Runs -->
 	<section>
 		<h2
-			class="animate-fade-up section-heading mb-3"
-			style="animation-delay: 220ms"
+			class="animate-fade-up section-heading mb-2.5"
+			style="animation-delay: 180ms"
 		>
-			<List size={14} strokeWidth={1.75} class="text-graphite-secondary" aria-hidden="true" />
+			<List size={13} strokeWidth={1.75} class="text-graphite-secondary" aria-hidden="true" />
 			Recent Runs
 		</h2>
-		<div class="space-y-1.5">
+		<div class="space-y-1">
 			{#each dashboard.runs as run, i}
 				{@const id = runId(run)}
-				<div class="animate-fade-up" style="animation-delay: {260 + i * 35}ms">
+				<div class="animate-fade-up" style="animation-delay: {210 + i * 30}ms">
 					<RunCard {run} expanded={expandedId === id} onToggle={() => toggleRun(id)} />
 				</div>
 			{/each}
