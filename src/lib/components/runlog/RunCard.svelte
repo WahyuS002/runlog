@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
 	import type { Runlog } from '$lib/types/runlog';
-	import { formatNumber } from '$lib/data/dashboard';
+	import { formatNumber, formatDateShort } from '$lib/data/dashboard';
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
 	import PaceSplitBars from './PaceSplitBars.svelte';
 	import HrZoneBar from './HrZoneBar.svelte';
@@ -24,6 +24,7 @@
 
 	const stress = $derived(run.performance.aerobic_training_stress);
 	const recovery = $derived(run.hr_recovery);
+	const dt = $derived(formatDateShort(run.date));
 </script>
 
 <div class="rounded-2xl border border-divider bg-surface shadow-sm transition-shadow hover:shadow-md">
@@ -35,8 +36,8 @@
 	>
 		<!-- Date -->
 		<div class="w-20 shrink-0">
-			<p class="text-sm font-semibold text-graphite">{run.date}</p>
-			<p class="text-[11px] text-graphite-secondary">{run.time}</p>
+			<p class="text-sm font-semibold text-graphite">{dt.dayMon}</p>
+			<p class="text-[11px] text-graphite-secondary">{dt.yearTime} · {run.time}</p>
 		</div>
 
 		<!-- Core stats -->

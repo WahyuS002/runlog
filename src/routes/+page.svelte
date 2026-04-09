@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { computeDashboard } from '$lib/data/dashboard';
+	import { computeDashboard, formatDate } from '$lib/data/dashboard';
 	import KpiCard from '$lib/components/runlog/KpiCard.svelte';
 	import RunCard from '$lib/components/runlog/RunCard.svelte';
 	import MonthlyTrend from '$lib/components/runlog/MonthlyTrend.svelte';
@@ -72,7 +72,7 @@
 				label="Best Pace"
 				value={dashboard.fastestRun?.pace ?? '—'}
 				unit={dashboard.fastestRun ? '/km' : ''}
-				sublabel={dashboard.fastestRun?.date ?? 'No qualifying runs'}
+				sublabel={dashboard.fastestRun ? formatDate(dashboard.fastestRun.date) : 'No qualifying runs'}
 				icon={Gauge}
 			/>
 		</div>

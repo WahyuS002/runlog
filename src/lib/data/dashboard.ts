@@ -24,6 +24,31 @@ export function formatNumber(n: number): string {
 	return s.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
+const MONTH_NAMES = [
+	'Jan',
+	'Feb',
+	'Mar',
+	'Apr',
+	'May',
+	'Jun',
+	'Jul',
+	'Aug',
+	'Sep',
+	'Oct',
+	'Nov',
+	'Dec'
+];
+
+export function formatDate(iso: string): string {
+	const [y, m, d] = iso.split('-');
+	return `${parseInt(d)} ${MONTH_NAMES[parseInt(m) - 1]} ${y}`;
+}
+
+export function formatDateShort(iso: string): { dayMon: string; yearTime: string } {
+	const [y, m, d] = iso.split('-');
+	return { dayMon: `${d} ${MONTH_NAMES[parseInt(m) - 1]}`, yearTime: y };
+}
+
 const MIN_DISTANCE_FOR_PACE = 1;
 
 export interface MonthAggregate {
@@ -48,21 +73,6 @@ export interface DashboardData {
 	runs: Runlog[];
 	isExampleData: boolean;
 }
-
-const MONTH_NAMES = [
-	'Jan',
-	'Feb',
-	'Mar',
-	'Apr',
-	'May',
-	'Jun',
-	'Jul',
-	'Aug',
-	'Sep',
-	'Oct',
-	'Nov',
-	'Dec'
-];
 
 function computeMonthlyAggregates(list: Runlog[]): MonthAggregate[] {
 	const map = new Map<string, MonthAggregate>();

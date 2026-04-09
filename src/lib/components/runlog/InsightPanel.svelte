@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatNumber, type DashboardData } from '$lib/data/dashboard';
+	import { formatNumber, formatDate, type DashboardData } from '$lib/data/dashboard';
 	import Trophy from 'lucide-svelte/icons/trophy';
 	import Activity from 'lucide-svelte/icons/activity';
 
@@ -27,7 +27,7 @@
 				<dd class="text-lg font-semibold tracking-tight text-graphite">
 					{data.longestRun.km} <span class="text-sm font-normal text-graphite-secondary">km</span>
 				</dd>
-				<dd class="text-[10px] text-graphite-secondary">{data.longestRun.date}</dd>
+				<dd class="text-[10px] text-graphite-secondary">{formatDate(data.longestRun.date)}</dd>
 			</div>
 			<div class="border-t border-divider pt-3">
 				<dt class="text-xs text-graphite-secondary">Fastest Avg Pace</dt>
@@ -36,7 +36,7 @@
 						{data.fastestRun.pace}
 						<span class="text-sm font-normal text-graphite-secondary">/km</span>
 					</dd>
-					<dd class="text-[10px] text-graphite-secondary">{data.fastestRun.date}</dd>
+					<dd class="text-[10px] text-graphite-secondary">{formatDate(data.fastestRun.date)}</dd>
 				{:else}
 					<dd class="text-sm text-graphite-secondary">—</dd>
 				{/if}
