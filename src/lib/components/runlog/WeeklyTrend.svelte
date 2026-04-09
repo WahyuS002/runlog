@@ -4,66 +4,91 @@
 
 	let { data }: { data: WeeklyData } = $props();
 
-	const maxKm = $derived(Math.max(...data.days.map((d) => d.distanceKm), 0.1));
+	const maxKm = $derived(
+		Math.max(...data.days.map((d) => Math.max(d.currentKm, d.previousKm)), 0.1)
+	);
 </script>
 
-<div class="rounded-2xl border border-divider bg-surface p-5 shadow-sm">
-	<div class="flex items-start justify-between gap-4">
-		<div>
-			<h2 class="section-heading">
-				<TrendingUp
-					size={16}
-					strokeWidth={1.75}
-					class="text-graphite-secondary"
-					aria-hidden="true"
-				/>
-				Running last week
-			</h2>
-			<p class="mt-1.5 flex items-baseline gap-1.5">
-				<span class="text-3xl font-semibold tracking-tight text-graphite">
+<div class="mx-auto max-w-md">
+	<div class="rounded-2xl border border-divider/60 bg-surface px-6 py-5 shadow-xs">
+		<!-- Title -->
+		<div class="flex items-center gap-1.5 text-graphite-secondary">
+			<TrendingUp size={14} strokeWidth={1.75} aria-hidden="true" />
+			<span class="text-xs font-medium">Running last week</span>
+		</div>
+
+		<!-- Main total + delta -->
+		<div class="mt-2">
+			<p class="flex items-baseline gap-1">
+				<span class="text-4xl font-bold tracking-tight text-graphite">
 					{data.totalKm.toFixed(1)}
 				</span>
-				<span class="text-sm font-medium text-graphite-secondary">km</span>
+				<span class="text-sm font-semibold tracking-wide text-graphite-secondary uppercase">
+					KM
+				</span>
+			</p>
+			<p class="mt-0.5 text-xs text-graphite-secondary">
+				{#if data.deltaPct !== null}
+					<span
+						class="font-semibold {data.deltaPct >= 0 ? 'text-green-600' : 'text-red-500'}"
+					>
+						{data.deltaPct >= 0 ? '+' : ''}{data.deltaPct}%
+					</span>
+					<span>vs previous week</span>
+				{:else}
+					No previous-week baseline
+				{/if}
 			</p>
 		</div>
 
-		<!-- Delta -->
-		<div class="pt-5 text-right">
-			{#if data.deltaPct !== null}
-				<span
-					class="text-sm font-semibold {data.deltaPct >= 0
-						? 'text-lime-accent'
-						: 'text-red-500'}"
-				>
-					{data.deltaPct >= 0 ? '+' : ''}{data.deltaPct}%
-				</span>
-				<p class="text-[10px] text-graphite-secondary">vs previous week</p>
-			{:else}
-				<p class="text-xs text-graphite-secondary">No previous-week baseline</p>
-			{/if}
-		</div>
-	</div>
-
-	<!-- Daily bars -->
-	<div class="mt-4 flex gap-2">
-		{#each data.days as day, i}
-			{@const heightPct = maxKm > 0 ? (day.distanceKm / maxKm) * 100 : 0}
-			<div class="flex flex-1 flex-col items-center gap-1.5">
-				{#if day.distanceKm > 0}
-					<span class="text-[10px] font-medium text-graphite">{day.distanceKm}</span>
-				{:else}
-					<span class="text-[10px] text-graphite-secondary/40">—</span>
-				{/if}
-
-				<div class="relative w-full rounded-md bg-surface-dim" style="height: 80px">
-					<div
-						class="animate-fade-up absolute inset-x-1 bottom-0 rounded-t-md bg-cyan-accent/80"
-						style="height: {heightPct}%; animation-delay: {i * 60}ms; min-height: {day.distanceKm > 0 ? '3px' : '0px'}"
-					></div>
-				</div>
-
-				<span class="text-[10px] text-graphite-secondary">{day.label}</span>
+		<!-- Paired bar chart -->
+		<div class="relative mt-5">
+			<!-- Guide lines -->
+			<div class="pointer-events-none absolute inset-0 flex flex-col justify-between" style="height: 72px">
+				{#each { length: 4 } as _, j}
+					<div class="h-px w-full bg-divider/40"></div>
+				{/each}
 			</div>
-		{/each}
+
+			<!-- Bars -->
+			<div class="relative flex items-end gap-3" style="height: 72px">
+				{#each data.days as day, i}
+					{@const curPct = maxKm > 0 ? (day.currentKm / maxKm) * 100 : 0}
+					{@const prevPct = maxKm > 0 ? (day.previousKm / maxKm) * 100 : 0}
+					<div class="flex flex-1 items-end justify-center gap-[3px]" style="height: 100%">
+						{#if data.hasPrevWeek}
+							<div
+								class="w-[5px] rounded-t bg-graphite/8 transition-all"
+								style="height: {prevPct}%; min-height: {day.previousKm > 0 ? '2px' : '0px'}"
+							></div>
+						{/if}
+						<div
+							class="animate-fade-up w-[7px] rounded-t bg-blue-500 transition-all"
+							style="height: {curPct}%; animation-delay: {i * 50}ms; min-height: {day.currentKm > 0 ? '2px' : '0px'}"
+						></div>
+					</div>
+				{/each}
+			</div>
+
+			<!-- Value labels (above bars) -->
+			<div class="absolute -top-4 flex w-full gap-3">
+				{#each data.days as day}
+					<div class="flex flex-1 justify-center">
+						{#if day.currentKm > 0}
+							<span class="text-[9px] font-medium text-graphite/70">{day.currentKm}</span>
+						{/if}
+					</div>
+				{/each}
+			</div>
+		</div>
+
+		<!-- Day labels -->
+		<div class="mt-1.5 flex gap-3">
+			{#each data.days as day}
+				<div class="flex-1 text-center">
+					<span class="text-[10px] text-graphite-secondary/60">{day.label}</span>
+				</div>
+			{/each}
+		</div>
 	</div>
 </div>

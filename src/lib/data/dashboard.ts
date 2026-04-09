@@ -68,13 +68,15 @@ function msToIso(ms: number): string {
 export interface WeekDay {
 	date: string;
 	label: string;
-	distanceKm: number;
+	currentKm: number;
+	previousKm: number;
 }
 
 export interface WeeklyData {
 	totalKm: number;
 	prevTotalKm: number;
 	deltaPct: number | null;
+	hasPrevWeek: boolean;
 	days: WeekDay[];
 }
 
@@ -88,23 +90,28 @@ function computeWeeklyData(list: Runlog[]): WeeklyData {
 
 	const days: WeekDay[] = [];
 	let totalKm = 0;
+	let prevTotalKm = 0;
 	for (let i = 6; i >= 0; i--) {
-		const iso = msToIso(anchorMs - i * DAY_MS);
-		const km = dayMap.get(iso) ?? 0;
-		totalKm += km;
-		days.push({ date: iso, label: iso.split('-')[2], distanceKm: Math.round(km * 100) / 100 });
+		const curIso = msToIso(anchorMs - i * DAY_MS);
+		const prevIso = msToIso(anchorMs - (i + 7) * DAY_MS);
+		const curKm = dayMap.get(curIso) ?? 0;
+		const prevKm = dayMap.get(prevIso) ?? 0;
+		totalKm += curKm;
+		prevTotalKm += prevKm;
+		days.push({
+			date: curIso,
+			label: curIso.split('-')[2],
+			currentKm: Math.round(curKm * 100) / 100,
+			previousKm: Math.round(prevKm * 100) / 100
+		});
 	}
 	totalKm = Math.round(totalKm * 100) / 100;
-
-	let prevTotalKm = 0;
-	for (let i = 13; i >= 7; i--) {
-		prevTotalKm += dayMap.get(msToIso(anchorMs - i * DAY_MS)) ?? 0;
-	}
 	prevTotalKm = Math.round(prevTotalKm * 100) / 100;
 
-	const deltaPct = prevTotalKm > 0 ? Math.round(((totalKm - prevTotalKm) / prevTotalKm) * 100) : null;
+	const deltaPct =
+		prevTotalKm > 0 ? Math.round(((totalKm - prevTotalKm) / prevTotalKm) * 100) : null;
 
-	return { totalKm, prevTotalKm, deltaPct, days };
+	return { totalKm, prevTotalKm, deltaPct, hasPrevWeek: prevTotalKm > 0, days };
 }
 
 export interface DashboardData {
