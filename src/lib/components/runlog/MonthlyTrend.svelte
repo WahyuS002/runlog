@@ -13,20 +13,25 @@
 		Monthly Distance
 	</h2>
 
-	<div class="mt-4 flex items-end gap-2" style="height: 140px">
+	<div class="mt-4 flex gap-2">
 		{#each aggregates as agg, i}
 			{@const heightPct = maxDistance > 0 ? (agg.distanceKm / maxDistance) * 100 : 0}
-			<div
-				class="flex flex-1 flex-col items-center gap-1"
-				style="animation-delay: {i * 80}ms"
-			>
+			<div class="flex flex-1 flex-col items-center gap-1.5">
+				<!-- Value label -->
 				<span class="text-xs font-medium text-graphite">{agg.distanceKm}</span>
-				<div class="relative w-full flex-1">
+
+				<!-- Chart track -->
+				<div
+					class="relative w-full rounded-md bg-surface-dim"
+					style="height: 120px"
+				>
 					<div
-						class="animate-fade-up absolute inset-x-1 bottom-0 rounded-t-md bg-cyan-accent/80 transition-all"
-						style="height: {heightPct}%"
+						class="animate-fade-up absolute inset-x-1 bottom-0 rounded-t-md bg-cyan-accent/80"
+						style="height: {heightPct}%; animation-delay: {i * 80}ms; min-height: {agg.distanceKm > 0 ? '3px' : '0px'}"
 					></div>
 				</div>
+
+				<!-- Month label -->
 				<div class="text-center">
 					<span class="block text-[10px] leading-tight text-graphite-secondary">
 						{agg.label.split(' ')[0]}
