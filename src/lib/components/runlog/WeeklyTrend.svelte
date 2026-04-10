@@ -9,7 +9,7 @@
 	);
 </script>
 
-<div class="rounded-xl border border-divider/50 bg-surface px-5 py-4 shadow-xs">
+<div class="flex h-full flex-col rounded-xl border border-divider/50 bg-surface px-5 py-4 shadow-xs">
 	<!-- Title -->
 	<div class="flex items-center gap-1.5 text-graphite-secondary">
 		<TrendingUp size={14} strokeWidth={1.75} aria-hidden="true" />
@@ -41,11 +41,10 @@
 	</div>
 
 	<!-- Paired bar chart -->
-	<div class="relative mt-4">
+	<div class="relative mt-4 flex-1" style="min-height: 72px">
 		<!-- Guide lines -->
 		<div
 			class="pointer-events-none absolute inset-0 flex flex-col justify-between"
-			style="height: 72px"
 		>
 			{#each { length: 4 } as _}
 				<div class="h-px w-full bg-divider/30"></div>
@@ -53,7 +52,7 @@
 		</div>
 
 		<!-- Bars -->
-		<div class="relative flex items-end gap-3" style="height: 72px">
+		<div class="relative flex h-full items-end gap-3">
 			{#each data.days as day, i}
 				{@const curPct = maxKm > 0 ? (day.currentKm / maxKm) * 100 : 0}
 				{@const prevPct = maxKm > 0 ? (day.previousKm / maxKm) * 100 : 0}

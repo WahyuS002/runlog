@@ -3,6 +3,17 @@
 	import type { Runlog } from '$lib/types/runlog';
 	import { formatNumber, formatDateShort } from '$lib/data/dashboard';
 	import ChevronDown from 'lucide-svelte/icons/chevron-down';
+	import Info from 'lucide-svelte/icons/info';
+
+	const statusDescriptions: Record<string, string> = {
+		productive: 'Latihan efektif, fitness naik',
+		improving: 'Beban naik, tubuh mulai adaptasi',
+		maintained: 'Fitness stabil, tidak naik/turun',
+		recovery: 'Beban ringan, tubuh pulih',
+		detraining: 'Kurang latihan, fitness mulai turun',
+		overreaching: 'Beban terlalu berat, perlu istirahat',
+		unproductive: 'Latihan berat tapi fitness tidak naik'
+	};
 	import PaceSplitBars from './PaceSplitBars.svelte';
 	import HrZoneBar from './HrZoneBar.svelte';
 
@@ -44,23 +55,38 @@
 		</div>
 
 		<!-- Inline metrics -->
-		<div
-			class="flex min-w-0 flex-1 items-center gap-x-4 gap-y-0.5 overflow-hidden text-xs"
-		>
-			<span class="font-semibold text-graphite">{run.distance_km}<span class="font-normal text-graphite-secondary"> km</span></span>
+		<div class="flex min-w-0 flex-1 items-center gap-x-4 gap-y-0.5 overflow-hidden text-xs">
+			<span class="font-semibold text-graphite"
+				>{run.distance_km}<span class="font-normal text-graphite-secondary"> km</span></span
+			>
 			<span class="text-graphite-secondary">{run.duration}</span>
-			<span class="text-graphite-secondary">{run.avg_pace}<span class="text-graphite-secondary/60"> /km</span></span>
-			<span class="hidden text-graphite-secondary sm:inline">{run.avg_hr}<span class="text-graphite-secondary/60"> bpm</span></span>
+			<span class="text-graphite-secondary"
+				>{run.avg_pace}<span class="text-graphite-secondary/60"> /km</span></span
+			>
+			<span class="hidden text-graphite-secondary sm:inline"
+				>{run.avg_hr}<span class="text-graphite-secondary/60"> bpm</span></span
+			>
 		</div>
 
 		<!-- Status badge -->
 		{#if stress}
-			<span
-				class="shrink-0 rounded-full px-2 py-px text-[9px] font-medium capitalize {statusColors[
-					stress.status
-				] ?? 'bg-gray-100 text-gray-500'}"
-			>
-				{stress.status}
+			<span class="group relative shrink-0">
+				<span
+					class="inline-flex items-center gap-1 rounded-full py-px pr-1 pl-2 text-[9px] font-medium capitalize {statusColors[
+						stress.status
+					] ?? 'bg-gray-100 text-gray-500'}"
+				>
+					{stress.status}
+					<Info size={10} strokeWidth={2} class="opacity-40" />
+				</span>
+				<span
+					class="pointer-events-none absolute right-1/2 bottom-full z-10 mb-2 w-40 translate-x-1/2 rounded-lg bg-graphite px-2.5 py-1.5 text-center text-[10px] leading-snug font-normal text-white normal-case opacity-0 shadow-lg transition-opacity group-hover:opacity-100"
+				>
+					{statusDescriptions[stress.status] ?? stress.status}
+					<span
+						class="absolute top-full right-1/2 translate-x-1/2 border-4 border-transparent border-t-graphite"
+					></span>
+				</span>
 			</span>
 		{/if}
 
@@ -75,10 +101,12 @@
 	</button>
 
 	{#if expanded}
-		<div transition:slide={{ duration: 200 }} class="border-t border-divider/40 px-3.5 pb-4 pt-3">
+		<div transition:slide={{ duration: 200 }} class="border-t border-divider/40 px-3.5 pt-3 pb-4">
 			<div class="grid gap-5 md:grid-cols-2">
 				<div>
-					<h4 class="mb-1.5 text-[10px] font-medium tracking-wider text-graphite-secondary uppercase">
+					<h4
+						class="mb-1.5 text-[10px] font-medium tracking-wider text-graphite-secondary uppercase"
+					>
 						Pace Splits
 					</h4>
 					<PaceSplitBars splits={run.pace.per_km} />
@@ -88,7 +116,9 @@
 				</div>
 
 				<div>
-					<h4 class="mb-1.5 text-[10px] font-medium tracking-wider text-graphite-secondary uppercase">
+					<h4
+						class="mb-1.5 text-[10px] font-medium tracking-wider text-graphite-secondary uppercase"
+					>
 						Heart Rate Zones
 					</h4>
 					<HrZoneBar zones={run.hr_zones_minutes} />
@@ -98,7 +128,9 @@
 				</div>
 
 				<div>
-					<h4 class="mb-1.5 text-[10px] font-medium tracking-wider text-graphite-secondary uppercase">
+					<h4
+						class="mb-1.5 text-[10px] font-medium tracking-wider text-graphite-secondary uppercase"
+					>
 						Recovery
 					</h4>
 					<div class="grid grid-cols-2 gap-2">
@@ -125,7 +157,9 @@
 				</div>
 
 				<div>
-					<h4 class="mb-1.5 text-[10px] font-medium tracking-wider text-graphite-secondary uppercase">
+					<h4
+						class="mb-1.5 text-[10px] font-medium tracking-wider text-graphite-secondary uppercase"
+					>
 						Cadence & Stride
 					</h4>
 					<div class="grid grid-cols-2 gap-2">
@@ -156,7 +190,9 @@
 							</span>
 						</span>
 						{#if stress}
-							<span class="inline-flex items-center gap-1 rounded-md bg-bone px-2 py-0.5 text-[10px]">
+							<span
+								class="inline-flex items-center gap-1 rounded-md bg-bone px-2 py-0.5 text-[10px]"
+							>
 								<span class="text-graphite-secondary">Stress</span>
 								<span class="font-semibold text-graphite">{stress.value}</span>
 							</span>
