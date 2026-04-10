@@ -1,68 +1,117 @@
-# sv
+# Runlog
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Runlog is a personal running dashboard built with SvelteKit. It renders a training overview and recent session history from flat JSON files, with sample data included so the app still works cleanly in fresh forks, CI, and preview deploys.
 
-## Creating a project
+## Quick Start
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```sh
-# create a new project
-npx sv create my-app
-```
-
-To recreate this project with the same configuration:
+Install dependencies:
 
 ```sh
-# recreate this project
-pnpm dlx sv@0.14.1 create --template minimal --types ts --add prettier tailwindcss="plugins:typography,forms" --install pnpm runlog.wahyusyahputra.com
+pnpm install
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Start the development server:
 
 ```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+pnpm dev
 ```
 
-## Data
+Build a production bundle:
 
-Runlog entries live as one JSON file per run under `src/data/`, named `YYYY-MM-DD-HHMM.json` (date + start time, no colon — sorts chronologically). The schema is defined in `src/lib/types/runlog.ts`.
+```sh
+pnpm build
+```
 
-- `src/data/*.json` — your personal runlog data. **Gitignored** so forks stay clean.
-- `src/data/example/*.json` — sample runs that ship with the repo. Used as a fallback when no personal data is present (fresh forks, CI, etc).
+## How Data Works
 
-The loader at `src/lib/data/runs.ts` shows personal data when available, otherwise falls back to the example set.
+Runlog loads data from two places:
 
-### Adding your own runs
+- `src/data/*.json` contains your personal runs. These files are gitignored on purpose, so you can keep private training data out of the main repo.
+- `src/data/example/*.json` contains committed sample runs. The app uses these when no personal data is present.
 
-Drop new files into `src/data/` following the naming convention and schema. They will be picked up automatically by Vite glob import.
+The loading behavior lives in `src/lib/data/runs.ts`:
 
-### Deploying with private data (Cloudflare Pages)
+- if `src/data/*.json` exists, Runlog uses your personal runs
+- otherwise it falls back to `src/data/example/*.json`
 
-Personal data is intentionally kept out of this repo. For production deploys, store your data in a separate **private** GitHub repo and let the Cloudflare Pages build pull it in:
+The JSON schema for each run lives in `src/lib/types/runlog.ts`.
 
-1. Create a private repo (e.g. `runlog-data`) containing only your `*.json` files at the root.
-2. Generate a GitHub fine-grained PAT with read-only access to that repo.
-3. In Cloudflare Pages → your project → Settings → Environment variables, add:
-   - `RUNLOG_DATA_TOKEN` = the PAT
+## Adding Your Own Runs
+
+You do not need a private repository, token, or Cloudflare setup to add data locally.
+
+Just place one JSON file per run in `src/data/`, using this filename format:
+
+```text
+YYYY-MM-DD-HHMM.json
+```
+
+Example:
+
+```text
+src/data/2026-04-10-0601.json
+```
+
+Each file should match the schema in `src/lib/types/runlog.ts`.
+
+### End-to-End Local Workflow
+
+1. Run `pnpm install`
+2. Add one or more JSON files to `src/data/`
+3. Start the app with `pnpm dev`
+4. Open the site and confirm it no longer shows the `Example data` badge
+
+That is enough for local development.
+
+## Privacy Model
+
+Personal run files in `src/data/*.json` are ignored by git through `.gitignore`, so your private data does not get committed to the main repo by default.
+
+This setup gives you two modes:
+
+- local/private usage: keep your real data only on your machine in `src/data/`
+- public/fork-friendly usage: let the app fall back to committed sample data in `src/data/example/`
+
+## Optional: Deploy With Private Data on Cloudflare Pages
+
+If you want to deploy the site with your personal data without committing that data publicly, you can keep the JSON files in a separate private GitHub repository and let the Cloudflare Pages build fetch them at build time.
+
+This is an optional production workflow, not a requirement for local development.
+
+The fetch logic lives in `scripts/cf-build.sh`.
+
+### Setup
+
+1. Create a private GitHub repository, for example `runlog-data`
+2. Put your `*.json` run files at the root of that private repo
+3. Create a fine-grained GitHub PAT with read-only access to that repo
+4. In Cloudflare Pages, add these environment variables:
+   - `RUNLOG_DATA_TOKEN` = your GitHub token
    - `RUNLOG_DATA_REPO` = `<your-username>/runlog-data`
-4. Set the build command to `pnpm build:cf` (uses `scripts/cf-build.sh`).
-
-If those env vars are not set, the build falls back to the example data — so a fresh fork deploys cleanly out of the box.
-
-## Building
-
-To create a production version of your app:
+5. Set the Cloudflare build command to:
 
 ```sh
-npm run build
+pnpm build:cf
 ```
 
-You can preview the production build with `npm run preview`.
+During that build, `scripts/cf-build.sh` will:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- clone the private data repo into `/tmp/runlog-data`
+- copy any `*.json` files into `src/data/`
+- run the normal app build
+
+If `RUNLOG_DATA_TOKEN` or `RUNLOG_DATA_REPO` is missing, the build falls back to the committed example data instead.
+
+## Project Notes
+
+- `src/lib/types/runlog.ts` defines the run schema
+- `src/lib/data/runs.ts` defines personal-data vs example-data loading
+- `scripts/cf-build.sh` defines the optional Cloudflare private-data fetch flow
+
+## Preview
+
+To preview the production build locally:
+
+```sh
+pnpm preview
+```
