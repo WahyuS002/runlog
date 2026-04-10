@@ -10,7 +10,7 @@ export const siteSeo = {
 	siteUrl: 'https://runlog.wahyusyahputra.com',
 	socialImagePath: '/og/runlog-home.png',
 	socialImageAlt: 'Preview card for Runlog by Wahyu Syahputra',
-	faviconPath: '/favicon.svg',
+	faviconPath: '/favicon.ico',
 	themeColor: '#0072f5'
 } as const;
 

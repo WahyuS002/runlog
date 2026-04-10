@@ -60,7 +60,7 @@
 </svelte:head>
 
 <div class="mx-auto max-w-[1080px] px-6 py-8">
-	<header class="animate-fade-up mb-6">
+	<header class="mb-6">
 		<h1 class="text-[32px] leading-[40px] font-semibold tracking-tight text-rl-text">Runlog</h1>
 		<p class="mt-1 text-[14px] leading-[20px] text-rl-text-secondary">
 			Training overview and session history
@@ -76,8 +76,7 @@
 
 	<section
 		aria-labelledby="weekly-training-heading"
-		class="animate-fade-up mb-6 grid items-stretch gap-6 lg:grid-cols-[1.5fr_1fr]"
-		style="animation-delay: 40ms"
+		class="mb-6 grid items-stretch gap-6 lg:grid-cols-[1.5fr_1fr]"
 	>
 		<WeeklyTrend
 			distance={dashboard.weeklyData}
@@ -90,17 +89,14 @@
 	<section aria-labelledby="recent-runs-heading">
 		<h2
 			id="recent-runs-heading"
-			class="animate-fade-up section-heading mb-3"
-			style="animation-delay: 80ms"
+			class="section-heading mb-3"
 		>
 			Recent Running Sessions
 		</h2>
 		<div class="space-y-2">
-			{#each dashboard.runs as run, i}
+			{#each dashboard.runs as run}
 				{@const id = runId(run)}
-				<div class="animate-fade-up" style="animation-delay: {100 + i * 25}ms">
-					<RunCard {run} expanded={expandedId === id} onToggle={() => toggleRun(id)} />
-				</div>
+				<RunCard {run} expanded={expandedId === id} onToggle={() => toggleRun(id)} />
 			{/each}
 		</div>
 	</section>
