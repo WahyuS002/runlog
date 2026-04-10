@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+	<title id="title">Runlog social preview</title>
+	<desc id="desc">Social preview card for Runlog by Wahyu Syahputra.</desc>
+	<defs>
+		<linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+			<stop offset="0%" stop-color="#ffffff" />
+			<stop offset="100%" stop-color="#edf5ff" />
+		</linearGradient>
+	</defs>
+	<rect width="1200" height="630" fill="url(#bg)" />
+	<circle cx="1035" cy="120" r="122" fill="#dbeafe" />
+	<circle cx="1120" cy="510" r="172" fill="#eff6ff" />
+	<rect x="54" y="54" width="1092" height="522" rx="36" fill="#ffffff" stroke="#e5e7eb" stroke-width="2" />
+	<text x="100" y="146" fill="#0072f5" font-family="Geist, Inter, system-ui, sans-serif" font-size="24" font-weight="700" letter-spacing="6">PERSONAL RUNNING LOG</text>
+	<text x="100" y="258" fill="#171717" font-family="Geist, Inter, system-ui, sans-serif" font-size="64" font-weight="700">Wahyu Syahputra</text>
+	<text x="100" y="336" fill="#171717" font-family="Geist, Inter, system-ui, sans-serif" font-size="42" font-weight="600">Training dashboard for weekly mileage,</text>
+	<text x="100" y="390" fill="#171717" font-family="Geist, Inter, system-ui, sans-serif" font-size="42" font-weight="600">recent runs, recovery, and performance trends.</text>
+	<rect x="100" y="454" width="244" height="72" rx="18" fill="#fafafa" stroke="#ebebeb" />
+	<rect x="364" y="454" width="244" height="72" rx="18" fill="#fafafa" stroke="#ebebeb" />
+	<rect x="628" y="454" width="244" height="72" rx="18" fill="#fafafa" stroke="#ebebeb" />
+	<text x="128" y="486" fill="#6e6e6e" font-family="Geist, Inter, system-ui, sans-serif" font-size="20" font-weight="600">WEEKLY TREND</text>
+	<text x="128" y="517" fill="#171717" font-family="Geist, Inter, system-ui, sans-serif" font-size="28" font-weight="700">Consistency at a glance</text>
+	<text x="392" y="486" fill="#6e6e6e" font-family="Geist, Inter, system-ui, sans-serif" font-size="20" font-weight="600">RECENT RUNS</text>
+	<text x="392" y="517" fill="#171717" font-family="Geist, Inter, system-ui, sans-serif" font-size="28" font-weight="700">Session history in one page</text>
+	<text x="656" y="486" fill="#6e6e6e" font-family="Geist, Inter, system-ui, sans-serif" font-size="20" font-weight="600">RECOVERY</text>
+	<text x="656" y="517" fill="#171717" font-family="Geist, Inter, system-ui, sans-serif" font-size="28" font-weight="700">Pace, HR, cadence insights</text>
+	<path d="M902 192l35 145 45-104 28 72 44-114 38 146" fill="none" stroke="#171717" stroke-linecap="round" stroke-linejoin="round" stroke-width="18" />
+	<path d="M900 444c27-22 58-34 93-34 37 0 68 11 98 11 20 0 38-4 54-13" fill="none" stroke="#0072f5" stroke-linecap="round" stroke-width="16" />
+</svg>

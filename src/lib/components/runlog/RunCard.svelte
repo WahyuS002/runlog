@@ -8,13 +8,13 @@
 	import HrZoneBar from './HrZoneBar.svelte';
 
 	const statusDescriptions: Record<string, string> = {
-		productive: 'Latihan efektif, fitness naik',
-		improving: 'Beban naik, tubuh mulai adaptasi',
-		maintained: 'Fitness stabil, tidak naik/turun',
-		recovery: 'Beban ringan, tubuh pulih',
-		detraining: 'Kurang latihan, fitness mulai turun',
-		overreaching: 'Beban terlalu berat, perlu istirahat',
-		unproductive: 'Latihan berat tapi fitness tidak naik'
+		productive: 'Training is effective and fitness is improving.',
+		improving: 'Training load is rising and the body is adapting.',
+		maintained: 'Fitness is holding steady without major change.',
+		recovery: 'Training load is light to support recovery.',
+		detraining: 'Recent training load is low and fitness may be slipping.',
+		overreaching: 'Training load is very high and extra rest may help.',
+		unproductive: 'Training load is high, but fitness is not improving yet.'
 	};
 
 	let {
