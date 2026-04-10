@@ -41,7 +41,11 @@
 		class="animate-fade-up mb-6 grid items-stretch gap-6 lg:grid-cols-[1.5fr_1fr]"
 		style="animation-delay: 40ms"
 	>
-		<WeeklyTrend data={dashboard.weeklyData} />
+		<WeeklyTrend
+			distance={dashboard.weeklyData}
+			cadenceStride={dashboard.cadenceStrideTrend}
+			recovery={dashboard.recoveryTrend}
+		/>
 		<InsightPanel data={dashboard} />
 	</section>
 

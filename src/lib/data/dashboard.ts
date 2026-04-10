@@ -114,6 +114,122 @@ function computeWeeklyData(list: Runlog[]): WeeklyData {
 	return { totalKm, prevTotalKm, deltaPct, hasPrevWeek: prevTotalKm > 0, days };
 }
 
+export interface DailyCadenceStridePoint {
+	date: string;
+	label: string;
+	avgCadence: number;
+	avgStride: number;
+	hasData: boolean;
+}
+
+export interface CadenceStrideTrend {
+	days: DailyCadenceStridePoint[];
+	avgCadence: number;
+	avgStride: number;
+}
+
+export interface DailyRecoveryPoint {
+	date: string;
+	label: string;
+	recoveryHours: number;
+	hasData: boolean;
+}
+
+export interface RecoveryTrend {
+	days: DailyRecoveryPoint[];
+	avgRecovery: number;
+	latestRecovery: { hours: number; date: string } | null;
+}
+
+function computeCadenceStrideTrend(list: Runlog[], anchorMs: number): CadenceStrideTrend {
+	const dayRuns = new Map<string, Runlog[]>();
+	for (const run of list) {
+		const arr = dayRuns.get(run.date) ?? [];
+		arr.push(run);
+		dayRuns.set(run.date, arr);
+	}
+
+	const days: DailyCadenceStridePoint[] = [];
+	let totalCadence = 0;
+	let totalStride = 0;
+	let totalDist = 0;
+
+	for (let i = 6; i >= 0; i--) {
+		const iso = msToIso(anchorMs - i * DAY_MS);
+		const eligible = (dayRuns.get(iso) ?? []).filter((r) => r.distance_km >= MIN_DISTANCE_FOR_PACE);
+
+		if (eligible.length === 0) {
+			days.push({ date: iso, label: iso.split('-')[2], avgCadence: 0, avgStride: 0, hasData: false });
+			continue;
+		}
+
+		const dist = eligible.reduce((s, r) => s + r.distance_km, 0);
+		const wCadence = eligible.reduce((s, r) => s + r.cadence.avg_spm * r.distance_km, 0) / dist;
+		const wStride = eligible.reduce((s, r) => s + r.avg_stride_cm * r.distance_km, 0) / dist;
+
+		totalCadence += wCadence * dist;
+		totalStride += wStride * dist;
+		totalDist += dist;
+
+		days.push({
+			date: iso,
+			label: iso.split('-')[2],
+			avgCadence: Math.round(wCadence),
+			avgStride: Math.round(wStride * 10) / 10,
+			hasData: true
+		});
+	}
+
+	return {
+		days,
+		avgCadence: totalDist > 0 ? Math.round(totalCadence / totalDist) : 0,
+		avgStride: totalDist > 0 ? Math.round((totalStride / totalDist) * 10) / 10 : 0
+	};
+}
+
+function computeRecoveryTrend(list: Runlog[], anchorMs: number): RecoveryTrend {
+	// group runs by date, pick last run of each day for recovery
+	const dayLastRun = new Map<string, Runlog>();
+	// list is sorted newest-first, so iterate in reverse to let earlier entries win, then later overwrite
+	for (let i = list.length - 1; i >= 0; i--) {
+		dayLastRun.set(list[i].date, list[i]);
+	}
+
+	const days: DailyRecoveryPoint[] = [];
+	let totalRecovery = 0;
+	let count = 0;
+	let latestRecovery: { hours: number; date: string } | null = null;
+
+	for (let i = 6; i >= 0; i--) {
+		const iso = msToIso(anchorMs - i * DAY_MS);
+		const run = dayLastRun.get(iso);
+		const hours = run?.performance.recovery_time_hours ?? 0;
+		const hasData = !!run && hours > 0;
+
+		if (hasData) {
+			totalRecovery += hours;
+			count++;
+			if (!latestRecovery) latestRecovery = { hours, date: iso };
+		}
+
+		days.push({ date: iso, label: iso.split('-')[2], recoveryHours: hasData ? hours : 0, hasData });
+	}
+
+	// latestRecovery should be most recent date with data (iterate from end)
+	for (let i = days.length - 1; i >= 0; i--) {
+		if (days[i].hasData) {
+			latestRecovery = { hours: days[i].recoveryHours, date: days[i].date };
+			break;
+		}
+	}
+
+	return {
+		days,
+		avgRecovery: Math.round(totalRecovery / 7),
+		latestRecovery
+	};
+}
+
 export interface DashboardData {
 	totalRuns: number;
 	totalDistanceKm: number;
@@ -125,6 +241,8 @@ export interface DashboardData {
 	avgRecoveryHours: number;
 	totalCalories: number;
 	weeklyData: WeeklyData;
+	cadenceStrideTrend: CadenceStrideTrend;
+	recoveryTrend: RecoveryTrend;
 	runs: Runlog[];
 	isExampleData: boolean;
 }
@@ -179,6 +297,8 @@ export function computeDashboard(): DashboardData {
 		avgRecoveryHours,
 		totalCalories,
 		weeklyData: computeWeeklyData(runs),
+		cadenceStrideTrend: computeCadenceStrideTrend(runs, dateToMs(runs[0].date)),
+		recoveryTrend: computeRecoveryTrend(runs, dateToMs(runs[0].date)),
 		runs,
 		isExampleData
 	};
