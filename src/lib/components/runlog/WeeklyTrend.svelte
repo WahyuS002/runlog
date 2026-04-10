@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { WeeklyData } from '$lib/data/dashboard';
-	import TrendingUp from 'lucide-svelte/icons/trending-up';
 
 	let { data }: { data: WeeklyData } = $props();
 
@@ -9,27 +8,22 @@
 	);
 </script>
 
-<div class="flex h-full flex-col rounded-xl border border-divider/50 bg-surface px-5 py-4 shadow-xs">
+<div class="flex h-full flex-col rounded-xl border border-rl-border bg-rl-surface p-5">
 	<!-- Title -->
-	<div class="flex items-center gap-1.5 text-graphite-secondary">
-		<TrendingUp size={14} strokeWidth={1.75} aria-hidden="true" />
-		<span class="text-xs font-medium">Running last week</span>
-	</div>
+	<p class="text-[13px] leading-[18px] text-rl-text-secondary">Running last week</p>
 
 	<!-- Main total + delta -->
-	<div class="mt-1.5">
-		<p class="flex items-baseline gap-1">
-			<span class="text-4xl font-bold tracking-tight text-graphite">
+	<div class="mt-2">
+		<p class="flex items-baseline gap-1.5">
+			<span class="text-[32px] leading-[40px] font-semibold tracking-tight text-rl-text">
 				{data.totalKm.toFixed(1)}
 			</span>
-			<span class="text-sm font-semibold tracking-wide text-graphite-secondary uppercase">
-				KM
-			</span>
+			<span class="text-[13px] font-medium text-rl-text-tertiary">km</span>
 		</p>
-		<p class="mt-0.5 text-xs text-graphite-secondary">
+		<p class="mt-0.5 text-[13px] leading-[18px] text-rl-text-secondary">
 			{#if data.deltaPct !== null}
 				<span
-					class="font-semibold {data.deltaPct >= 0 ? 'text-green-600' : 'text-red-500'}"
+					class="font-medium {data.deltaPct >= 0 ? 'text-rl-success' : 'text-rl-danger'}"
 				>
 					{data.deltaPct >= 0 ? '+' : ''}{data.deltaPct}%
 				</span>
@@ -41,13 +35,11 @@
 	</div>
 
 	<!-- Paired bar chart -->
-	<div class="relative mt-4 flex-1" style="min-height: 72px">
+	<div class="relative mt-5 flex-1" style="min-height: 72px">
 		<!-- Guide lines -->
-		<div
-			class="pointer-events-none absolute inset-0 flex flex-col justify-between"
-		>
+		<div class="pointer-events-none absolute inset-0 flex flex-col justify-between">
 			{#each { length: 4 } as _}
-				<div class="h-px w-full bg-divider/30"></div>
+				<div class="h-px w-full bg-rl-border-subtle"></div>
 			{/each}
 		</div>
 
@@ -59,13 +51,13 @@
 				<div class="flex flex-1 items-end justify-center gap-[3px]" style="height: 100%">
 					{#if data.hasPrevWeek}
 						<div
-							class="w-[5px] rounded-t bg-graphite/8 transition-all"
+							class="w-[5px] rounded-t bg-rl-border transition-all"
 							style="height: {prevPct}%; min-height: {day.previousKm > 0 ? '2px' : '0px'}"
 						></div>
 					{/if}
 					<div
-						class="animate-fade-up w-[7px] rounded-t bg-blue-500 transition-all"
-						style="height: {curPct}%; animation-delay: {i * 50}ms; min-height: {day.currentKm > 0 ? '2px' : '0px'}"
+						class="animate-fade-up w-[7px] rounded-t bg-rl-accent transition-all"
+						style="height: {curPct}%; animation-delay: {i * 40}ms; min-height: {day.currentKm > 0 ? '2px' : '0px'}"
 					></div>
 				</div>
 			{/each}
@@ -76,7 +68,9 @@
 			{#each data.days as day}
 				<div class="flex flex-1 justify-center">
 					{#if day.currentKm > 0}
-						<span class="text-[9px] font-medium text-graphite/70">{day.currentKm}</span>
+						<span class="font-mono text-[11px] font-medium text-rl-text-secondary"
+							>{day.currentKm}</span
+						>
 					{/if}
 				</div>
 			{/each}
@@ -84,10 +78,10 @@
 	</div>
 
 	<!-- Day labels -->
-	<div class="mt-1.5 flex gap-3">
+	<div class="mt-2 flex gap-3">
 		{#each data.days as day}
 			<div class="flex-1 text-center">
-				<span class="text-[10px] text-graphite-secondary/60">{day.label}</span>
+				<span class="font-mono text-[11px] text-rl-text-tertiary">{day.label}</span>
 			</div>
 		{/each}
 	</div>

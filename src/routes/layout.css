@@ -2,56 +2,74 @@
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
+@font-face {
+	font-family: 'Geist';
+	src: url('/fonts/GeistVF.woff2') format('woff2');
+	font-weight: 100 900;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Geist Mono';
+	src: url('/fonts/GeistMonoVF.woff2') format('woff2');
+	font-weight: 100 900;
+	font-display: swap;
+}
+
 @theme {
-	/* Surface palette */
-	--color-bone: #f7f5f0;
-	--color-bone-dark: #ede9e0;
-	--color-surface: #ffffff;
-	--color-surface-dim: #f0ede6;
+	--font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+	--font-mono: 'Geist Mono', ui-monospace, monospace;
+
+	/* Surfaces */
+	--color-rl-bg: #fafafa;
+	--color-rl-surface: #ffffff;
+	--color-rl-surface-hover: #fafafa;
+	--color-rl-subtle: #f5f5f5;
 
 	/* Text */
-	--color-graphite: #1a1a1a;
-	--color-graphite-secondary: #6b7280;
+	--color-rl-text: #171717;
+	--color-rl-text-secondary: #4d4d4d;
+	--color-rl-text-tertiary: #6e6e6e;
 
-	/* Accents */
-	--color-cyan-accent: #06b6d4;
-	--color-cyan-soft: #cffafe;
-	--color-lime-accent: #84cc16;
-	--color-lime-soft: #ecfccb;
+	/* Borders */
+	--color-rl-border: #ebebeb;
+	--color-rl-border-subtle: rgba(0, 0, 0, 0.08);
 
-	/* Divider */
-	--color-divider: #e5e7eb;
+	/* Accent */
+	--color-rl-accent: #0072f5;
 
-	/* HR zone colors */
-	--color-zone-extreme: #ef4444;
+	/* Semantic */
+	--color-rl-success: #45a557;
+	--color-rl-warning: #ffb224;
+	--color-rl-danger: #da2f35;
+
+	/* HR zone colors — keep semantic */
+	--color-zone-extreme: #da2f35;
 	--color-zone-anaerobic: #f97316;
 	--color-zone-aerobic: #eab308;
-	--color-zone-fat-burning: #22c55e;
-	--color-zone-warm-up: #94a3b8;
-
-	/* Status badge colors */
-	--color-status-productive: #84cc16;
-	--color-status-improving: #06b6d4;
-	--color-status-maintained: #94a3b8;
-	--color-status-recovery: #f59e0b;
-	--color-status-detraining: #f97316;
-	--color-status-overreaching: #ef4444;
-	--color-status-unproductive: #6b7280;
+	--color-zone-fat-burning: #45a557;
+	--color-zone-warm-up: #999999;
 }
 
 @layer base {
+	::selection {
+		background-color: var(--color-rl-text);
+		color: #ffffff;
+	}
+
 	body {
-		background-color: var(--color-bone);
-		color: var(--color-graphite);
+		background-color: var(--color-rl-bg);
+		color: var(--color-rl-text);
+		font-family: var(--font-sans);
 		font-variant-numeric: tabular-nums;
 		-webkit-font-smoothing: antialiased;
 	}
 }
 
-@keyframes fade-up {
+@keyframes fade-in {
 	from {
 		opacity: 0;
-		transform: translateY(12px);
+		transform: translateY(4px);
 	}
 	to {
 		opacity: 1;
@@ -60,17 +78,19 @@
 }
 
 .animate-fade-up {
-	animation: fade-up 0.5s ease-out both;
+	animation: fade-in 0.3s ease-out both;
 }
 
 .section-heading {
 	display: flex;
 	align-items: center;
-	gap: 4px;
-	font-size: 0.65rem;
+	gap: 6px;
+	font-size: 13px;
+	line-height: 18px;
 	font-weight: 500;
-	letter-spacing: 0.05em;
-	text-transform: uppercase;
-	color: var(--color-graphite-secondary);
+	color: var(--color-rl-text-secondary);
 }
 
+.font-mono {
+	font-family: var(--font-mono);
+}

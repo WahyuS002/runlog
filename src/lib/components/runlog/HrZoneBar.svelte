@@ -16,11 +16,11 @@
 </script>
 
 <div class="space-y-2">
-	<div class="flex h-4 w-full overflow-hidden rounded-full">
+	<div class="flex h-3 w-full overflow-hidden rounded-full bg-rl-subtle">
 		{#each data as segment}
 			{#if segment.percent > 0}
 				<div
-					class="transition-all duration-500"
+					class="transition-all duration-300"
 					style="width: {segment.percent}%; background-color: {zoneColors[segment.zone]}"
 					title="{segment.label}: {segment.minutes}min ({segment.percent}%)"
 				></div>
@@ -30,13 +30,13 @@
 	<div class="flex flex-wrap gap-x-4 gap-y-1">
 		{#each data as segment}
 			{#if segment.percent > 0}
-				<div class="flex items-center gap-1.5 text-xs text-graphite-secondary">
+				<div class="flex items-center gap-1.5 text-[11px] text-rl-text-secondary">
 					<span
 						class="inline-block h-2 w-2 rounded-full"
 						style="background-color: {zoneColors[segment.zone]}"
 					></span>
 					{segment.label}
-					<span class="font-medium text-graphite">{segment.percent}%</span>
+					<span class="font-mono font-medium text-rl-text">{segment.percent}%</span>
 				</div>
 			{/if}
 		{/each}
